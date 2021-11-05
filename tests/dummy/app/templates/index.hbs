@@ -1,0 +1,491 @@
+{{!-- template-lint-disable require-button-type --}}
+{{!-- template-lint-disable no-forbidden-elements --}}
+{{!-- template-lint-disable no-inline-styles --}}
+
+<header class="hero">
+  <img src="logo.svg" height="105" alt="" role="presentation" />
+  <h1>Tippy.js for Ember</h1>
+
+  <a
+    class="repo-link"
+    href="https://github.com/nag5000/ember-tippy"
+    aria-label="ember-tippy repository on github"
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="32" height="32">
+      <path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
+    </svg>
+  </a>
+</header>
+
+<main>
+  <section class="section">
+    <h2><a id="links" href="#links">#</a>Links</h2>
+    <ul>
+      <li>
+        <a
+          href="https://github.com/nag5000/ember-tippy/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >ember-tippy repo</a>
+      </li>
+      <li>
+        <a
+          href="https://github.com/nag5000/ember-tippy/blob/master/API.md"
+          target="_blank"
+          rel="noopener noreferrer"
+        >ember-tippy API</a>
+      </li>
+      <li>
+        <a
+          href="https://github.com/atomiks/tippyjs/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >Tippy.js repo</a>
+      </li>
+      <li>
+        <a
+          href="https://atomiks.github.io/tippyjs/v6/all-props/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >Tippy.js documentation</a>
+      </li>
+    </ul>
+  </section>
+
+  <section class="section">
+    <h2><a id="examples" href="#examples">#</a>Examples</h2>
+    <ul>
+      <li><a href="#basic-usage-modifier">Basic usage: modifier</a></li>
+      <li><a href="#basic-usage-component">Basic usage: component</a></li>
+      <li><a href="#tippy-options">Tippy options</a></li>
+      <li><a href="#html-string-content">HTML string content (for modifier or inline component)</a></li>
+      <li><a href="#html-element-content">HTMLElement content (for modifier or inline component)</a></li>
+      <li><a href="#custom-targets">Custom target(s)</a></li>
+      <li><a href="#singleton">Singleton</a></li>
+      <li><a href="#interactive">Interactive (popovers)</a></li>
+      <li><a href="#plugins">Plugins</a></li>
+      <li><a href="#themes">Themes, Arrows, Animations</a></li>
+      <li><a href="#headless">Headless Tippy</a></li>
+    </ul>
+  </section>
+
+  <section class="section">
+    <h3>
+      <a id="basic-usage-modifier" href="#basic-usage-modifier">#</a>
+      Basic usage: modifier
+    </h3>
+
+    <p>
+      Tippy content — <code>args.positional[0]</code> or <code>args.named.content</code>.
+      <br />Tippy target(s) — current element by default or <code>args.named.target</code>.
+    </p>
+
+    <div class="demo">
+      {{!-- BEGIN-SNIPPET basic-usage-modifier --}}
+      <button {{tippy "I'm a Tippy tooltip!"}}>My Button</button>
+      {{!-- END-SNIPPET --}}
+    </div>
+
+    <CodeSnippet @name="basic-usage-modifier" @lang="glimmer" />
+  </section>
+
+  <section class="section">
+    <h3>
+      <a id="basic-usage-component" href="#basic-usage-component">#</a>
+      Basic usage: component
+    </h3>
+
+    <p>
+      Tippy content — inner content of <code>&lt;Tippy&gt;</code> in block form
+      or <code>@content</code> argument.
+      <br />Tippy target(s) — parent element by default or <code>@target</code>.
+    </p>
+
+    <DemoBasicUsageComponent as |demo|>
+      <div class="demo">
+        {{!-- BEGIN-SNIPPET basic-usage-component --}}
+        <button>
+          My Button
+
+          <Tippy style="text-align: center;">
+            I'm a Tippy tooltip!
+            <br />{{demo.currentTime}}
+          </Tippy>
+        </button>
+
+        <button>
+          My Button
+          <Tippy @content="I'm a Tippy tooltip!" />
+        </button>
+        {{!-- END-SNIPPET --}}
+      </div>
+    </DemoBasicUsageComponent>
+
+    <CodeSnippet @name="basic-usage-component" @lang="glimmer" />
+
+    <details>
+      <summary><code>demo.currentTime</code> implementation</summary>
+      <CodeSnippet @name="basic-usage-component.js" @lang="js" />
+    </details>
+  </section>
+
+  <section class="section">
+    <h3>
+      <a id="tippy-options" href="#tippy-options">#</a>
+      Tippy options
+    </h3>
+
+    <p>
+      <a
+        href="https://atomiks.github.io/tippyjs/v6/all-props/"
+        target="_blank"
+        rel="noopener noreferrer"
+      >All tippy.js options</a> are supported: just pass them to the modifier or component.
+    </p>
+
+    <div class="demo">
+      {{!-- BEGIN-SNIPPET tippy-options --}}
+      <button {{tippy "I'm a Tippy tooltip!" placement="bottom"}}>My Button</button>
+
+      <button>
+        My Button
+        <Tippy @placement="right">I'm a Tippy tooltip!</Tippy>
+      </button>
+      {{!-- END-SNIPPET --}}
+    </div>
+
+    <CodeSnippet @name="tippy-options" @lang="glimmer" />
+  </section>
+
+  <section class="section">
+    <h3>
+      <a id="html-string-content" href="#html-string-content">#</a>
+      HTML string content (for modifier or inline component)
+    </h3>
+
+    <p>
+      You can use the
+      <a
+        href="https://atomiks.github.io/tippyjs/v6/all-props/#allowhtml"
+        target="_blank"
+        rel="noopener noreferrer"
+      >allowHTML: true</a> option or just pass
+      <a
+        href="https://api.emberjs.com/ember/3.28/functions/@ember%2Ftemplate/htmlSafe"
+        target="_blank"
+        rel="noopener noreferrer"
+      >htmlSafe string</a> to the modifier or component.
+    </p>
+
+    <div class="demo">
+      {{!-- BEGIN-SNIPPET html-string-content --}}
+      <button
+        {{tippy "I'm a <mark>Tippy</mark> tooltip!" allowHTML=true}}
+      >My Button</button>
+
+      {{! NOTE: html-safe is not a built-in Ember helper. }}
+      <button
+        {{tippy (html-safe "I'm a <mark>Tippy</mark> tooltip!")}}
+      >My Button</button>
+
+      <button>
+        My Button
+        <Tippy
+          @content="I'm a <mark>Tippy</mark> tooltip!"
+          @allowHTML={{true}}
+        />
+      </button>
+
+      <button>
+        My Button
+        <Tippy
+          @content={{html-safe "I'm a <mark>Tippy</mark> tooltip!"}}
+        />
+      </button>
+      {{!-- END-SNIPPET --}}
+    </div>
+
+    <CodeSnippet @name="html-string-content" @lang="glimmer" />
+
+    <details>
+      <summary><code>html-safe</code> helper</summary>
+      <CodeSnippet @name="html-safe-helper" @lang="js" />
+    </details>
+  </section>
+
+  <section class="section">
+    <h3>
+      <a id="html-element-content" href="#html-element-content">#</a>
+      HTMLElement content (for modifier or inline component)
+    </h3>
+
+    <p>
+      (If you use block form of <code>&lt;Tippy&gt;</code> component, the content is already
+      <code>HTMLElement</code>)
+    </p>
+
+    <p>
+      It is better to render the content element with the <code>hidden</code> attribute,
+      so it won't be visible before the tooltip is initialized (as well as in fastboot).
+      Ember-tippy will take care of removing the <code>hidden</code> attribute.
+    </p>
+
+    <p>
+      You might think it would be more appropriate to render the content using
+      a <code>&lt;template&gt;</code> tag instead of <code>&lt;div hidden&gt;</code>. That's true!
+      But, unfortunately, there is a
+      <a
+        href="https://github.com/glimmerjs/glimmer.js/issues/369"
+        target="_blank"
+        rel="noopener noreferrer"
+      >bug</a>
+      in ember (glimmer), <code>&lt;template&gt;</code> is not rendered correctly and we can't use
+      it here until the bug is fixed.
+    </p>
+
+    <div class="demo">
+      {{!-- BEGIN-SNIPPET html-element-content --}}
+      {{! NOTE: find-element-by-id is not a built-in Ember helper. }}
+      <button
+        {{tippy (find-element-by-id "demo-html-element-content")}}
+      >My Button</button>
+
+      <div id="demo-html-element-content" hidden>
+        I'm a <mark>Tippy</mark> tooltip!
+      </div>
+      {{!-- END-SNIPPET --}}
+    </div>
+
+    <CodeSnippet @name="html-element-content" @lang="glimmer" />
+
+    <details>
+      <summary><code>find-element-by-id</code> helper</summary>
+      <CodeSnippet @name="find-element-by-id-helper" @lang="js" />
+    </details>
+  </section>
+
+  <section class="section">
+    <h3>
+      <a id="custom-targets" href="#custom-targets">#</a>
+      Custom target(s)
+    </h3>
+
+    <div class="demo">
+      {{!-- BEGIN-SNIPPET custom-targets --}}
+      <button class="custom-target">My Button 1</button>
+      <button class="custom-target">My Button 2</button>
+      <button class="custom-target">My Button 3</button>
+      <span {{tippy "I'm a Tippy tooltip!" target=".custom-target"}}></span>
+      {{!-- END-SNIPPET --}}
+    </div>
+
+    <CodeSnippet @name="custom-targets" @lang="glimmer" />
+  </section>
+
+  <section class="section">
+    <h3>
+      <a id="singleton" href="#singleton">#</a>
+      Singleton
+    </h3>
+
+    <p>
+      Use <code>singleton: true</code> or <code>singleton: Object</code> (singleton options)
+      to create
+      <a
+        href="https://atomiks.github.io/tippyjs/v6/addons/#singleton"
+        target="_blank"
+        rel="noopener noreferrer"
+      >Tippy Singleton</a>
+      from the tippy instances which have been mounted on specified targets.
+    </p>
+
+    <div class="demo">
+      {{!-- BEGIN-SNIPPET singleton --}}
+      <button class="demo-singleton">My Button 1</button>
+      <button class="demo-singleton">My Button 2</button>
+      <button class="demo-singleton">My Button 3</button>
+      <span
+        {{tippy "I'm a Tippy tooltip!"
+          target=".demo-singleton"
+          singleton=(hash delay=500)
+        }}
+      ></span>
+      {{!-- END-SNIPPET --}}
+    </div>
+
+    <CodeSnippet @name="singleton" @lang="glimmer" />
+  </section>
+
+  <section class="section">
+    <h3>
+      <a id="interactive" href="#interactive">#</a>
+      Interactive (popovers)
+    </h3>
+
+    <div class="demo">
+      {{!-- BEGIN-SNIPPET interactive --}}
+      <button>
+        My Button
+
+        {{!-- template-lint-disable no-nested-interactive --}}
+        {{! You can also avoid this lint error by using the "target" option. }}
+        <Tippy @interactive={{true}} as |tippyInstance|>
+          <label>
+            <input type="checkbox" checked />
+            I'm a Tippy popover!
+          </label>
+
+          <button {{on "click" tippyInstance.hide}}>Hide</button>
+        </Tippy>
+      </button>
+      {{!-- END-SNIPPET --}}
+    </div>
+
+    <CodeSnippet @name="interactive" @lang="glimmer" />
+  </section>
+
+  <section class="section">
+    <h3>
+      <a id="plugins" href="#plugins">#</a>
+      Plugins
+    </h3>
+
+    <p>
+      This demo uses 2 tippy plugins:
+      <a
+        href="https://atomiks.github.io/tippyjs/v6/plugins/#exported-plugins"
+        target="_blank"
+        rel="noopener noreferrer"
+      >followCursor</a> and
+      <a
+        href="https://atomiks.github.io/tippyjs/v6/plugins/#hideonesc"
+        target="_blank"
+        rel="noopener noreferrer"
+      >hideOnEsc</a>.
+    </p>
+
+    <DemoPlugins as |demo|>
+      <div class="demo">
+        {{!-- BEGIN-SNIPPET plugins --}}
+        <button
+          {{tippy "I'm a Tippy tooltip!"
+            followCursor=true
+            plugins=demo.plugins
+          }}
+        >My Button</button>
+        {{!-- END-SNIPPET --}}
+      </div>
+    </DemoPlugins>
+
+    <CodeSnippet @name="plugins" @lang="glimmer" />
+
+    <details>
+      <summary><code>demo.plugins</code></summary>
+      <CodeSnippet @name="plugins.js" @lang="js" />
+    </details>
+  </section>
+
+  <section class="section">
+    <h3>
+      <a id="themes" href="#themes">#</a>
+      Themes, Arrows, Animations
+    </h3>
+
+    <p>
+      ember-tippy does not import any
+      <a
+        href="https://atomiks.github.io/tippyjs/v6/getting-started/#optional-extra-imports"
+        target="_blank"
+        rel="noopener noreferrer"
+      >optional extra stuff</a> from tippy (except
+      <a
+        href="https://atomiks.github.io/tippyjs/v6/getting-started/#1-package-manager"
+        target="_blank"
+        rel="noopener noreferrer"
+      >tippy core css</a> for <code>shouldIncludeTippyCoreCss: true</code> by default
+      in ember-tippy build-time config).
+      <br />So you need to import tippy's built-in
+      <a
+        href="https://atomiks.github.io/tippyjs/v6/themes/"
+        target="_blank"
+        rel="noopener noreferrer"
+      >custom themes</a>,
+      <a
+        href="https://atomiks.github.io/tippyjs/v6/themes/#styling-the-arrow"
+        target="_blank"
+        rel="noopener noreferrer"
+      >custom arrows</a> and
+      <a
+        href="https://atomiks.github.io/tippyjs/v6/animations/"
+        target="_blank"
+        rel="noopener noreferrer"
+      >custom animations</a>
+      separately.
+    </p>
+
+    <p>
+      If you want to apply some custom styling for all tippies by default, use
+      <a
+        href="https://atomiks.github.io/tippyjs/v6/customization/#default-props"
+        target="_blank"
+        rel="noopener noreferrer"
+      ><code>tippy.setDefaultProps()</code></a>, for example:
+      <CodeBlock
+        @code="// Anywhere in your application code.
+import tippy from 'tippy.js';
+import 'tippy.js/themes/light.css';
+...
+tippy.setDefaultProps({ theme: 'light' });"
+        @language="js"
+      />
+    </p>
+
+    <p>Below is an example of a tippy tooltip with custom theme, animation and arrow:</p>
+
+    <DemoThemes as |demo|>
+      <div class="demo">
+        {{!-- BEGIN-SNIPPET themes --}}
+        <button
+          {{tippy "I'm a Tippy tooltip!"
+            theme="light"
+            animation="scale"
+            arrow=demo.roundArrow
+          }}
+        >My Button</button>
+        {{!-- END-SNIPPET --}}
+      </div>
+    </DemoThemes>
+
+    <CodeSnippet @name="themes" @lang="glimmer" />
+    <CodeSnippet @name="themes.js" @lang="js" />
+  </section>
+
+  <section class="section">
+    <h3>
+      <a id="headless" href="#headless">#</a>
+      Headless Tippy
+    </h3>
+
+    <div class="demo">
+      {{!-- BEGIN-SNIPPET headless --}}
+      <button>
+        My Button
+
+        <TippyHeadless @placement="right">
+          <div class="my-popper">
+            <div class="my-popper-box">
+              I'm a headless Tippy tooltip!
+            </div>
+          </div>
+        </TippyHeadless>
+      </button>
+
+      <style>
+        .my-popper-box { padding: 4px; border: 1px solid; }
+      </style>
+      {{!-- END-SNIPPET --}}
+    </div>
+
+    <CodeSnippet @name="headless" @lang="glimmer" />
+  </section>
+</main>

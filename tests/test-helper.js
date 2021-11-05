@@ -9,4 +9,6 @@ setApplication(Application.create(config.APP));
 
 setup(QUnit.assert);
 
+QUnit.dump.maxDepth = 20;
+
 start();
