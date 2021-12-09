@@ -9,8 +9,11 @@
 [![npm version](https://badge.fury.io/js/ember-tippy.svg)](https://badge.fury.io/js/ember-tippy)
 [![CI](https://github.com/nag5000/ember-tippy/actions/workflows/ci.yml/badge.svg?branch=master&event=push)](https://github.com/nag5000/ember-tippy/actions/workflows/ci.yml)
 
-This is an Ember wrapper for [tippy.js](https://github.com/atomiks/tippyjs) with easy to use
+This is an Ember wrapper for [Tippy.js](https://github.com/atomiks/tippyjs) with easy to use
 modifier and component.
+
+- Ember-tippy ❤️ Octane. No observers. No computeds. 0% Ember Classic.
+- Powered by modern and up to date [Tippy.js](https://github.com/atomiks/tippyjs) and [Popper.js v2](https://popper.js.org/).
 
 
 Compatibility
