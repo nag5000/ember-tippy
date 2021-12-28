@@ -67,12 +67,11 @@ Supported Features
 
 ember-tippy supports [all tippy.js options](https://atomiks.github.io/tippyjs/v6/all-props/).
 
-[Singleton](https://atomiks.github.io/tippyjs/v6/addons/#singleton) is supported.
-There is an additional `singleton` option for ease of use, so you don't need to import and call
-`createSingleton` from tippy.js manually.
+[Singleton](https://atomiks.github.io/tippyjs/v6/addons/#singleton) is supported via
+`<TippySingleton>` component.
 
-[Headless Tippy](https://atomiks.github.io/tippyjs/v6/headless-tippy/) is also supported via
-a separate `<HeadlessTippy>` component.
+[Headless Tippy](https://atomiks.github.io/tippyjs/v6/headless-tippy/) is supported via
+`<HeadlessTippy>` component.
 
 All the [Plugins](https://atomiks.github.io/tippyjs/v6/plugins/) also should work:
 just use them the same way as for vanilla tippy.js.
@@ -91,20 +90,19 @@ Build-time Config and Imports
 
 ember-tippy does not import any 
 [optional extra stuff](https://atomiks.github.io/tippyjs/v6/getting-started/#optional-extra-imports)
-from tippy, except:
-
-- [Tippy Core CSS](https://atomiks.github.io/tippyjs/v6/getting-started/#1-package-manager)
-- [`createSingleton`](https://atomiks.github.io/tippyjs/v6/addons/#singleton)
+from tippy, except 
+[Tippy Core CSS](https://atomiks.github.io/tippyjs/v6/getting-started/#1-package-manager).
 
 If you don't want to bundle Tippy Core CSS, you can disable it by using 
 `shouldIncludeTippyCoreCss: false` in ember-tippy build-time config.
 
-Importing of `createSingleton` cannot be disabled at the moment (but could be implemented in the
-future).
-
 If you want to use tippy's built-in custom themes, arrows or animations, please refer to 
 [this example](https://nag5000.github.io/ember-tippy/#themes). Configurable bundling of optional
 extra tippy stuff at build-time could be implemented in the future.
+
+`<TippySingleton>` also imports 
+[`createSingleton`](https://atomiks.github.io/tippyjs/v6/addons/#singleton).
+If you don't use this component and you are on embroider, it should be tree-shaken.
 
 Below is the ember-tippy build-time config with defaults:
 

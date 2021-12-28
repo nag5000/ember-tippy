@@ -289,27 +289,33 @@
     </h3>
 
     <p>
-      Use <code>singleton: true</code> or <code>singleton: Object</code> (singleton options)
-      to create
+      Use <code>&lt;TippySingleton&gt;</code> component to create a
       <a
         href="https://atomiks.github.io/tippyjs/v6/addons/#singleton"
         target="_blank"
         rel="noopener noreferrer"
-      >Tippy Singleton</a>
-      from the tippy instances which have been mounted on specified targets.
+      >Tippy Singleton</a>.
+      In block form the component yields a singleton instance.
+      Put it in <code>singleton</code> property to attach a regular tippy instance to the singleton.
+    </p>
+
+    <p>
+      You can also use an inline form of <code>&lt;TippySingleton&gt;</code> component to create a
+      singleton from existing tippy instances:
+      <code>&lt;TippySingleton @instances=&lcub;&lcub;...&rcub;&rcub; /&gt;</code>
     </p>
 
     <div class="demo">
       {{!-- BEGIN-SNIPPET singleton --}}
-      <button class="demo-singleton">My Button 1</button>
-      <button class="demo-singleton">My Button 2</button>
-      <button class="demo-singleton">My Button 3</button>
-      <span
-        {{tippy "I'm a Tippy tooltip!"
-          target=".demo-singleton"
-          singleton=(hash delay=500)
-        }}
-      ></span>
+      <TippySingleton
+        @delay={{500}}
+        @moveTransition="transform 0.2s ease-out"
+        as |tippySingleton|
+      >
+        <button {{tippy "Tooltip 1" singleton=tippySingleton}}>My Button 1</button>
+        <button {{tippy "Tooltip 2" singleton=tippySingleton}}>My Button 2</button>
+        <button {{tippy "Tooltip 3" singleton=tippySingleton}}>My Button 3</button>
+      </TippySingleton>
       {{!-- END-SNIPPET --}}
     </div>
 
