@@ -2,7 +2,7 @@ import Modifier from 'ember-modifier';
 import { isHTMLSafe } from '@ember/template';
 import { getOwnConfig, importSync, macroCondition } from '@embroider/macros';
 
-import tippy, { createSingleton } from 'tippy.js';
+import tippy from 'tippy.js';
 
 if (macroCondition(getOwnConfig().shouldIncludeTippyCoreCss)) {
   importSync('tippy.js/dist/tippy.css');
@@ -71,11 +71,11 @@ export default class TippyModifier extends Modifier {
     this._instances = tippy(tippyTargets, tippyOptions);
 
     if (singleton) {
-      const singletonOptions = typeof singleton === 'object' ? singleton : {};
-      this._singleton = createSingleton(this._instances, singletonOptions);
+      singleton.addInstances(this._instancesArray);
+      this._singleton = singleton;
     }
 
-    onInstancesCreate?.(this._instancesArray, { singleton: this._singleton });
+    onInstancesCreate?.(this._instancesArray, { singleton });
   }
 
   didUpdateArguments() {
@@ -90,10 +90,10 @@ export default class TippyModifier extends Modifier {
     const { onInstancesWillDestroy } = this._options;
     onInstancesWillDestroy?.(this._instancesArray, { singleton: this._singleton });
 
-    this._singleton?.destroy();
-    this._instancesArray.forEach(x => x.destroy());
-
+    this._singleton?.removeInstances(this._instancesArray);
     this._singleton = null;
+
+    this._instancesArray.forEach(x => x.destroy());
     this._instances = null;
     this._options = null;
   }

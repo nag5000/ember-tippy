@@ -203,6 +203,8 @@ module('Integration | Modifier | tippy', function (hooks) {
   });
 
   test('singleton', async function (assert) {
+    let singletonId;
+
     this.content = (reference) => reference.getAttribute('data-tooltip');
 
     this.onInstancesCreate = (instances, { singleton }) => {
@@ -210,33 +212,42 @@ module('Integration | Modifier | tippy', function (hooks) {
         assert.step('onCreate:' + inst.reference.textContent);
       });
 
-      assert.step('singleton:' + !!singleton);
+      assert.true(singleton != null, 'singleton instance is not null');
+
+      assert.step('singleton:' + singleton.id);
+      singletonId = singletonId ?? singleton.id;
     };
 
+    this.n = new Array(3).fill(1);
+
     await render(hbs`
-      <div class="t t1" tabindex="0" data-tooltip="Tooltip1">Trigger1</div>
-      <div class="t t2" tabindex="0" data-tooltip="Tooltip2">Trigger2</div>
-      <div class="t t3" tabindex="0" data-tooltip="Tooltip3">Trigger3</div>
-      <span
-        {{tippy
-          content=this.content
-          target=".t"
-          singleton=(hash appendTo="parent" delay=(array 0 50) duration=50)
-          onInstancesCreate=this.onInstancesCreate
-        }}
-      ></span>
+      <TippySingleton @appendTo="parent" @delay={{array 0 50}} @duration={{50}} as |ts|>
+        {{#each this.n as |_ i|}}
+          <div
+            class="t{{i}}"
+            tabindex="0"
+            data-tooltip="Tooltip{{i}}"
+            {{tippy content=this.content singleton=ts onInstancesCreate=this.onInstancesCreate}}
+          >Trigger{{i}}</div>
+        {{/each}}
+      </TippySingleton>
     `);
 
     assert.verifySteps([
+      'onCreate:Trigger0',
+      `singleton:${singletonId}`,
       'onCreate:Trigger1',
+      `singleton:${singletonId}`,
       'onCreate:Trigger2',
-      'onCreate:Trigger3',
-      'singleton:true'
+      `singleton:${singletonId}`,
     ]);
 
+    const t0 = find('.t0');
     const t1 = find('.t1');
     const t2 = find('.t2');
-    const t3 = find('.t3');
+
+    await focus(t0);
+    assert.deepEqual(findAll('.tippy-content').map(x => x.textContent), ['Tooltip0']);
 
     await focus(t1);
     assert.deepEqual(findAll('.tippy-content').map(x => x.textContent), ['Tooltip1']);
@@ -244,10 +255,72 @@ module('Integration | Modifier | tippy', function (hooks) {
     await focus(t2);
     assert.deepEqual(findAll('.tippy-content').map(x => x.textContent), ['Tooltip2']);
 
-    await focus(t3);
-    assert.deepEqual(findAll('.tippy-content').map(x => x.textContent), ['Tooltip3']);
+    await blur(t2);
+    await waitUntil(() => find('.tippy-content') === null, {
+      timeoutMessage: 'no tooltip'
+    });
+  });
 
-    await blur(t3);
+  test('singleton: inline form of TippySingleton', async function (assert) {
+    let singletonId;
+
+    this.instances = [];
+
+    this.content = (reference) => reference.getAttribute('data-tooltip');
+
+    this.onInstancesCreate = (instances, { singleton }) => {
+      instances.forEach(inst => {
+        assert.step('onCreate:' + inst.reference.textContent);
+      });
+
+      assert.step('singleton:' + singleton?.id);
+
+      this.set('instances', this.instances.concat(instances));
+    };
+
+    this.n = new Array(3).fill(1);
+
+    await render(hbs`
+      {{#each this.n as |_ i|}}
+        <div
+          class="t{{i}}"
+          tabindex="0"
+          data-tooltip="Tooltip{{i}}"
+          {{tippy content=this.content singleton=ts onInstancesCreate=this.onInstancesCreate}}
+        >Trigger{{i}}</div>
+      {{/each}}
+
+      <TippySingleton
+        @instances={{this.instances}}
+        @appendTo="parent"
+        @delay={{array 0 50}}
+        @duration={{50}}
+      />
+    `);
+
+    assert.verifySteps([
+      'onCreate:Trigger0',
+      `singleton:undefined`,
+      'onCreate:Trigger1',
+      `singleton:undefined`,
+      'onCreate:Trigger2',
+      `singleton:undefined`,
+    ]);
+
+    const t0 = find('.t0');
+    const t1 = find('.t1');
+    const t2 = find('.t2');
+
+    await focus(t0);
+    assert.deepEqual(findAll('.tippy-content').map(x => x.textContent), ['Tooltip0']);
+
+    await focus(t1);
+    assert.deepEqual(findAll('.tippy-content').map(x => x.textContent), ['Tooltip1']);
+
+    await focus(t2);
+    assert.deepEqual(findAll('.tippy-content').map(x => x.textContent), ['Tooltip2']);
+
+    await blur(t2);
     await waitUntil(() => find('.tippy-content') === null, {
       timeoutMessage: 'no tooltip'
     });

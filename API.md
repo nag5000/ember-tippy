@@ -73,17 +73,17 @@ Invoked after all tippy instances for specified target(s) have been updated.
 - Type: `Function(tippyInstances[], data: Object)`<sup>1</sup>
 - Default: `null`
 
-Invoked before all tippy instances for specified target(s) and singleton have been destroyed.
+Invoked before all tippy instances for specified target(s) have been destroyed.
 
 <sup>1</sup> `data.singleton` [Singleton instance](https://atomiks.github.io/tippyjs/v6/addons/#singleton)
 
 
 #### `singleton`
 
-- Type: `Boolean` | `Object`
-- Default: `false`
+- Type: `Object`
+- Default: `null`
 
-[Singleton](https://atomiks.github.io/tippyjs/v6/addons/#singleton)
+[Singleton](https://atomiks.github.io/tippyjs/v6/addons/#singleton) target.
 
 
 ## `<Tippy>` Component
