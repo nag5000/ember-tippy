@@ -17,6 +17,7 @@ export default class TippySingletonComponent extends Component {
   }
 
   get tippyOptions() {
+    // eslint-disable-next-line no-unused-vars
     const { instances, ...tippyOptions } = this.options;
     return tippyOptions;
   }
@@ -31,6 +32,8 @@ export default class TippySingletonComponent extends Component {
       singleton = createSingleton(this.instances, this.tippyOptions);
       singleton.addInstances = this.addInstances.bind(this);
       singleton.removeInstances = this.removeInstances.bind(this);
+
+      // eslint-disable-next-line ember/no-side-effects
       this._singleton = singleton;
     }
 

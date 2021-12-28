@@ -212,10 +212,8 @@ module('Integration | Modifier | tippy', function (hooks) {
         assert.step('onCreate:' + inst.reference.textContent);
       });
 
-      assert.true(singleton != null, 'singleton instance is not null');
-
-      assert.step('singleton:' + singleton.id);
-      singletonId = singletonId ?? singleton.id;
+      assert.step('singleton:' + singleton?.id);
+      singletonId = singletonId ?? singleton?.id;
     };
 
     this.n = new Array(3).fill(1);
@@ -262,8 +260,6 @@ module('Integration | Modifier | tippy', function (hooks) {
   });
 
   test('singleton: inline form of TippySingleton', async function (assert) {
-    let singletonId;
-
     this.instances = [];
 
     this.content = (reference) => reference.getAttribute('data-tooltip');
