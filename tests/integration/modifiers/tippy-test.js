@@ -282,7 +282,7 @@ module('Integration | Modifier | tippy', function (hooks) {
           class="t{{i}}"
           tabindex="0"
           data-tooltip="Tooltip{{i}}"
-          {{tippy content=this.content singleton=ts onInstancesCreate=this.onInstancesCreate}}
+          {{tippy content=this.content onInstancesCreate=this.onInstancesCreate}}
         >Trigger{{i}}</div>
       {{/each}}
 
