@@ -30,7 +30,7 @@ Dependencies
 * tippy.js ^6.0.0. It's a peer dependency. The default addon blueprint will add tippy.js to
   your package.json during install.
 * ember-auto-import ^2.0.0
-* ember-modifier ^2.0.0
+* ember-modifier ^2.0.0 || ^3.0.0
 
 
 Installation
