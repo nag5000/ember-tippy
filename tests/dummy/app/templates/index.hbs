@@ -3,6 +3,10 @@
 {{!-- template-lint-disable no-inline-styles --}}
 
 <header class="hero">
+  {{#let (package-info) as |packageInfo|}}
+    <div class="package-info">Version {{packageInfo.version}}</div>
+  {{/let}}
+
   <img src="logo.svg" height="105" alt="" role="presentation" />
   <h1>Tippy.js for Ember</h1>
 

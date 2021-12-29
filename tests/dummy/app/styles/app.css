@@ -74,6 +74,17 @@ summary {
   color: #fff;
 }
 
+.package-info {
+  position: absolute;
+  top: 16px;
+  right: 22px;
+  padding: 10px 14px;
+
+  border-radius: 8px;
+  border: 1px solid;
+  color: #564756;
+}
+
 .hero > img {
   background-color: rgb(255 255 255 / 40%);
   padding: 30px 30px 40px 40px;

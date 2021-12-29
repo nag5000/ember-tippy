@@ -1,5 +1,8 @@
 'use strict';
 
+const path = require('path');
+const packageJson = require(path.join(process.cwd(), 'package.json'));
+
 module.exports = function (environment) {
   let ENV = {
     modulePrefix: 'dummy',
@@ -21,6 +24,8 @@ module.exports = function (environment) {
       // Here you can pass flags/options to your application instance
       // when it is created
     },
+
+    packageVersion: packageJson.version,
   };
 
   if (environment === 'development') {
