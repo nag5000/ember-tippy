@@ -203,17 +203,12 @@ module('Integration | Modifier | tippy', function (hooks) {
   });
 
   test('singleton', async function (assert) {
-    let singletonId;
-
     this.content = (reference) => reference.getAttribute('data-tooltip');
 
-    this.onInstancesCreate = (instances, { singleton }) => {
+    this.onInstancesCreate = (instances) => {
       instances.forEach(inst => {
         assert.step('onCreate:' + inst.reference.textContent);
       });
-
-      assert.step('singleton:' + singleton?.id);
-      singletonId = singletonId ?? singleton?.id;
     };
 
     this.n = new Array(3).fill(1);
@@ -233,11 +228,8 @@ module('Integration | Modifier | tippy', function (hooks) {
 
     assert.verifySteps([
       'onCreate:Trigger0',
-      `singleton:${singletonId}`,
       'onCreate:Trigger1',
-      `singleton:${singletonId}`,
       'onCreate:Trigger2',
-      `singleton:${singletonId}`,
     ]);
 
     const t0 = find('.t0');
@@ -264,12 +256,10 @@ module('Integration | Modifier | tippy', function (hooks) {
 
     this.content = (reference) => reference.getAttribute('data-tooltip');
 
-    this.onInstancesCreate = (instances, { singleton }) => {
+    this.onInstancesCreate = (instances) => {
       instances.forEach(inst => {
         assert.step('onCreate:' + inst.reference.textContent);
       });
-
-      assert.step('singleton:' + singleton?.id);
 
       this.set('instances', this.instances.concat(instances));
     };
@@ -296,11 +286,8 @@ module('Integration | Modifier | tippy', function (hooks) {
 
     assert.verifySteps([
       'onCreate:Trigger0',
-      `singleton:undefined`,
       'onCreate:Trigger1',
-      `singleton:undefined`,
       'onCreate:Trigger2',
-      `singleton:undefined`,
     ]);
 
     const t0 = find('.t0');

@@ -1,71 +1,36 @@
 import Component from '@glimmer/component';
-import { cached } from '@glimmer/tracking';
+import { tracked } from '@glimmer/tracking';
 
-import { createSingleton } from 'tippy.js';
+import TippySingletonSourceModifier from '../-private/tippy-singleton-source';
+import YieldSingletonLink from '../-private/yield-singleton-link';
 
 export default class TippySingletonComponent extends Component {
-  _instances = [];
-  _singleton = null;
+  singletonSourceModifier = TippySingletonSourceModifier;
+
+  @tracked instances = [];
+
+  constructor() {
+    super(...arguments);
+
+    const yieldSingletonLink = new YieldSingletonLink();
+    yieldSingletonLink.onTargetsUpdate = (instances) => this.instances = instances;
+    this.yieldSingletonLink = yieldSingletonLink;
+  }
 
   get options() {
     return this.args.options || this.args;
   }
 
-  get instances() {
-    const { instances } = this.options;
-    return instances ? this._instances.concat(instances) : this._instances;
-  }
-
-  get tippyOptions() {
-    // eslint-disable-next-line no-unused-vars
-    const { instances, ...tippyOptions } = this.options;
-    return tippyOptions;
-  }
-
-  @cached
-  get singleton() {
-    let singleton = this._singleton;
-    if (singleton) {
-      singleton.setInstances(this.instances);
-      singleton.setProps(this.tippyOptions);
-    } else {
-      singleton = createSingleton(this.instances, this.tippyOptions);
-      singleton.addInstances = this.addInstances.bind(this);
-      singleton.removeInstances = this.removeInstances.bind(this);
-
-      // eslint-disable-next-line ember/no-side-effects
-      this._singleton = singleton;
-    }
-
-    return singleton;
-  }
-
-  addInstances(tippyInstances) {
-    this._instances = this._instances.concat(tippyInstances);
-    this._singleton?.setInstances(this.instances);
-  }
-
-  removeInstances(tippyInstances) {
-    this._instances = removeItems(this._instances, tippyInstances);
-    this._singleton?.setInstances(this.instances);
+  get singletonSourceOptions() {
+    let { instances, ...rest } = this.options;
+    instances = this.instances.concat(instances || []);
+    return { ...rest, instances };
   }
 
   willDestroy() {
     super.willDestroy(...arguments);
-    this._instances = [];
-    this._singleton?.destroy();
-    this._singleton = null;
+    this.yieldSingletonLink.onTargetsUpdate = null;
+    this.yieldSingletonLink = null;
+    this.instances = [];
   }
-}
-
-function removeItems(array, items) {
-  array = array.slice();
-  items.forEach(item => {
-    let index;
-    while ((index = array.indexOf(item)) !== -1) {
-      array.splice(index, 1);
-    }
-  });
-
-  return array;
 }

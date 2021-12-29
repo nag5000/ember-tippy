@@ -1,1 +1,6 @@
-{{#if (has-block)}}{{yield this.singleton}}{{else if this.singleton}}{{! HACK: consume --}}{{/if}}
+{{yield this.yieldSingletonLink}}
+<span
+  data-tippy-singleton-source
+  hidden
+  {{this.singletonSourceModifier this.singletonSourceOptions}}
+></span>
