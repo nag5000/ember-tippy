@@ -18,13 +18,6 @@ export default class TippyModifier extends Modifier {
     return { content: this.args.positional[0], ...optionsHash };
   }
 
-  // NOTE: tippy() returns a single instance or an array of instances,
-  // depending on the type of targets argument.
-  // https://atomiks.github.io/tippyjs/v6/tippy-instance/#accessing-an-instance
-  get _instancesArray() {
-    return [].concat(this._instances);
-  }
-
   parseOptions(options) {
     if (options.content instanceof HTMLElement && options.content.hidden) {
       options.content.hidden = false;
@@ -45,7 +38,7 @@ export default class TippyModifier extends Modifier {
       onInstancesDidUpdate,
       onInstancesWillDestroy,
 
-      // the rest is tippy options (tippy warns about unknown options)
+      // the rest are tippy options (tippy warns about unknown options)
       ...tippyOptions
     } = options;
 
@@ -68,32 +61,33 @@ export default class TippyModifier extends Modifier {
     // NOTE: tippy() returns a single instance or an array of instances,
     // depending on the type of targets argument.
     // https://atomiks.github.io/tippyjs/v6/tippy-instance/#accessing-an-instance
-    this._instances = tippy(tippyTargets, tippyOptions);
+    const instances = tippy(tippyTargets, tippyOptions);
+    this._instances = [].concat(instances);
 
     if (singleton) {
-      singleton.addInstances(this._instancesArray);
+      singleton.addTargets(this._instances);
       this._singleton = singleton;
     }
 
-    onInstancesCreate?.(this._instancesArray, { singleton });
+    onInstancesCreate?.(this._instances);
   }
 
   didUpdateArguments() {
     this._options = this.parseOptions(this.options);
     const { tippyOptions, onInstancesDidUpdate } = this._options;
 
-    this._instancesArray.forEach(x => x.setProps(tippyOptions));
-    onInstancesDidUpdate?.(this._instancesArray, { singleton: this._singleton });
+    this._instances.forEach(x => x.setProps(tippyOptions));
+    onInstancesDidUpdate?.(this._instances);
   }
 
   willDestroy() {
     const { onInstancesWillDestroy } = this._options;
-    onInstancesWillDestroy?.(this._instancesArray, { singleton: this._singleton });
+    onInstancesWillDestroy?.(this._instances);
 
-    this._singleton?.removeInstances(this._instancesArray);
+    this._singleton?.removeTargets(this._instances);
     this._singleton = null;
 
-    this._instancesArray.forEach(x => x.destroy());
+    this._instances.forEach(x => x.destroy());
     this._instances = null;
     this._options = null;
   }

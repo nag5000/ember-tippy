@@ -50,32 +50,26 @@ options (see below).
 
 #### `onInstancesCreate`
 
-- Type: `Function(tippyInstances[], data: Object)`<sup>1</sup>
+- Type: `Function(tippyInstances[])`
 - Default: `null`
 
 Invoked once all tippy instances for specified target(s) have been created.
 
-<sup>1</sup> `data.singleton` [Singleton instance](https://atomiks.github.io/tippyjs/v6/addons/#singleton)
-
 
 #### `onInstancesDidUpdate`
 
-- Type: `Function(tippyInstances[], data: Object)`<sup>1</sup>
+- Type: `Function(tippyInstances[])`
 - Default: `null`
 
 Invoked after all tippy instances for specified target(s) have been updated.
 
-<sup>1</sup> `data.singleton` [Singleton instance](https://atomiks.github.io/tippyjs/v6/addons/#singleton)
-
 
 #### `onInstancesWillDestroy`
 
-- Type: `Function(tippyInstances[], data: Object)`<sup>1</sup>
+- Type: `Function(tippyInstances[])`
 - Default: `null`
 
 Invoked before all tippy instances for specified target(s) have been destroyed.
-
-<sup>1</sup> `data.singleton` [Singleton instance](https://atomiks.github.io/tippyjs/v6/addons/#singleton)
 
 
 #### `singleton`
@@ -83,7 +77,9 @@ Invoked before all tippy instances for specified target(s) have been destroyed.
 - Type: `Object`
 - Default: `null`
 
-[Singleton](https://atomiks.github.io/tippyjs/v6/addons/#singleton) target.
+A singleton link yielded by `<TippySingleton>` to attach a tippy to the
+[Singleton](https://atomiks.github.io/tippyjs/v6/addons/#singleton).
+It's not a tippy singleton instance.
 
 
 ## `<Tippy>` Component
@@ -189,3 +185,73 @@ See https://atomiks.github.io/tippyjs/v6/headless-tippy/ for details.
 
 
 The rest of the ember-tippy options are the same as for the `<Tippy>` component.
+
+
+## `<TippySingleton>` Component
+
+``` hbs
+<TippySingleton @placement="right" as |tippySingleton|>
+  <button {{tippy "Tooltip 1" singleton=tippySingleton}}>My Button 1</button>
+  <button {{tippy "Tooltip 2" singleton=tippySingleton}}>My Button 2</button>
+  <button {{tippy "Tooltip 3" singleton=tippySingleton}}>My Button 3</button>
+</TippySingleton>
+```
+
+
+### `{{yield tippySingleton}}` in block form
+
+A singleton link (it's not a tippy singleton instance) to attach a regular tippy instance to
+the singleton.
+
+
+### `@options`
+
+- Type: `Object`
+- Default: `null`
+
+All options via single argument. Alias for `<args>`.
+
+
+### `<args>`
+
+- Type: `Object`
+- Default: `{}`
+
+[tippy.js options](https://atomiks.github.io/tippyjs/v6/all-props/) +
+[tippy.js singleton options](https://atomiks.github.io/tippyjs/v6/addons/#overrides) +
+ember-tippy options (see below).
+
+
+### ember-tippy options
+
+#### `instances`
+
+- Type: `Object[]`
+- Default: collected by yielded singleton link in block form
+
+You can use this with inline form of `<TippySingleton>` component to create a singleton from
+existing tippy instances.
+
+
+#### `onSingletonCreate`
+
+- Type: `Function(tippySingletonInstance)`
+- Default: `null`
+
+Invoked once tippy singleton instance has been created.
+
+
+#### `onSingletonDidUpdate`
+
+- Type: `Function(tippySingletonInstance)`
+- Default: `null`
+
+Invoked after tippy singleton instance has been updated.
+
+
+#### `onSingletonWillDestroy`
+
+- Type: `Function(tippySingletonInstance)`
+- Default: `null`
+
+Invoked before tippy singleton instance has been destroyed.
