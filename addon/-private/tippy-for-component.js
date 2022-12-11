@@ -6,6 +6,6 @@ export default class TippyForComponentModifier extends TippyModifier {
   }
 
   get options() {
-    return { content: this.element, ...this.args.positional[0] };
+    return { content: this.element, ...this._positionalArgs[0] };
   }
 }

@@ -10,7 +10,7 @@ export default class TippyForHeadlessComponentModifier extends TippyModifier {
       content: null,
       animation: false,
       render: this.render.bind(this),
-      ...this.args.positional[0]
+      ...this._positionalArgs[0],
     };
   }
 

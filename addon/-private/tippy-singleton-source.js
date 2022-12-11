@@ -1,10 +1,28 @@
 import Modifier from 'ember-modifier';
+import { registerDestructor } from '@ember/destroyable';
 
 import { createSingleton } from 'tippy.js';
 
+function cleanup(modifierInstance) {
+  const { onSingletonWillDestroy } = modifierInstance._options;
+  onSingletonWillDestroy?.(modifierInstance.singleton);
+
+  modifierInstance.singleton.destroy();
+  modifierInstance.singleton = null;
+
+  modifierInstance._options = null;
+}
+
 export default class TippySingletonSourceModifier extends Modifier {
+  _positionalArgs = null;
+
+  constructor(owner, args) {
+    super(owner, args);
+    registerDestructor(this, cleanup);
+  }
+
   get options() {
-    return this.args.positional[0];
+    return this._positionalArgs[0];
   }
 
   parseOptions(options) {
@@ -31,28 +49,22 @@ export default class TippySingletonSourceModifier extends Modifier {
     };
   }
 
-  didInstall() {
+  modify(element, positional /*, named*/) {
+    this._positionalArgs = positional;
     this._options = this.parseOptions(this.options);
-    const { tippyInstances, tippySingletonOptions, onSingletonCreate } = this._options;
-    this.singleton = createSingleton(tippyInstances, tippySingletonOptions);
-    onSingletonCreate?.(this.singleton);
-  }
 
-  didUpdateArguments() {
-    this._options = this.parseOptions(this.options);
-    const { tippyInstances, tippySingletonOptions, onSingletonDidUpdate } = this._options;
-    this.singleton.setInstances(tippyInstances);
-    this.singleton.setProps(tippySingletonOptions);
-    onSingletonDidUpdate?.(this.singleton);
-  }
-
-  willDestroy() {
-    const { onSingletonWillDestroy } = this._options;
-    onSingletonWillDestroy?.(this.singleton);
-
-    this.singleton.destroy();
-    this.singleton = null;
-
-    this._options = null;
+    // Are we updating or installing?
+    if (!this.singleton) {
+      // Installing
+      const { tippyInstances, tippySingletonOptions, onSingletonCreate } = this._options;
+      this.singleton = createSingleton(tippyInstances, tippySingletonOptions);
+      onSingletonCreate?.(this.singleton);
+    } else {
+      // Updating
+      const { tippyInstances, tippySingletonOptions, onSingletonDidUpdate } = this._options;
+      this.singleton.setInstances(tippyInstances);
+      this.singleton.setProps(tippySingletonOptions);
+      onSingletonDidUpdate?.(this.singleton);
+    }
   }
 }
