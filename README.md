@@ -71,7 +71,7 @@ ember-tippy supports [all tippy.js options](https://atomiks.github.io/tippyjs/v6
 `<TippySingleton>` component.
 
 [Headless Tippy](https://atomiks.github.io/tippyjs/v6/headless-tippy/) is supported via
-`<HeadlessTippy>` component.
+`<TippyHeadless>` component.
 
 All the [Plugins](https://atomiks.github.io/tippyjs/v6/plugins/) also should work:
 just use them the same way as for vanilla tippy.js.
