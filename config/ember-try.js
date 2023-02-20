@@ -5,6 +5,7 @@ const { embroiderSafe, embroiderOptimized } = require('@embroider/test-setup');
 
 module.exports = async function () {
   return {
+    npmOptions: ['--legacy-peer-deps'],
     scenarios: [
       {
         name: 'ember-lts-3.28',
