@@ -1,4 +1,21 @@
 
+
+## 3.0.0-alpha.0 (2023-02-20)
+
+#### :boom: Breaking Change
+* [#5](https://github.com/nag5000/ember-tippy/pull/5) Use ember-modifier v3 API ([@tcjr](https://github.com/tcjr))
+
+#### :memo: Documentation
+* [#6](https://github.com/nag5000/ember-tippy/pull/6) Update HeadlessTippy componentName in README ([@jeffdaley](https://github.com/jeffdaley))
+
+#### :house: Internal
+* [#5](https://github.com/nag5000/ember-tippy/pull/5) Use ember-modifier v3 API ([@tcjr](https://github.com/tcjr))
+
+#### Committers: 2
+- Jeff Daley ([@jeffdaley](https://github.com/jeffdaley))
+- Tom Carter ([@tcjr](https://github.com/tcjr))
+
+
 ## 2.0.0 (2022-01-11)
 
 #### :boom: Breaking Change
