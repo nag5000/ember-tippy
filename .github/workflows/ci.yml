@@ -36,7 +36,7 @@ on:
   pull_request:
 
 env:
-  NODE_VERSION: '12'
+  NODE_VERSION: '16'
 
 jobs:
   lint:
@@ -173,8 +173,9 @@ jobs:
       fail-fast: true
       matrix:
         ember-try-scenario: [
-          ember-lts-3.25,
           ember-lts-3.28,
+          ember-lts-4.4,
+          ember-lts-4.8,
           ember-release,
           ember-beta,
           ember-canary,
